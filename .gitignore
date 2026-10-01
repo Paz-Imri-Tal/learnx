@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.pyc 
+.learnxvenv/
+.venv/
+
+
+# Database
+*.db 
+
+
+# Secrets
+.env
+
+
+# macOS
+.DS_Store
+
+
+# Frontend
+node_modules/
