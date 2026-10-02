@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import logo from "./assets/logo.png";
 
 function App() {
   const [status, setStatus] = useState("בודק...");
@@ -12,6 +13,9 @@ function App() {
 
   return (
     <div>
+      <div style={{ backgroundColor: "var(--color-primary)", padding: "16px"}}>
+        <img src={logo} alt="LearnX Logo" width="200"/>
+      </div>
       <h1>LearnX</h1>
       <p>מצב השרת: {status}</p>
     </div>
