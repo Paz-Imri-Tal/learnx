@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { apiFetch } from "../api";
+import AuthBrand from "../components/AuthBrand";
 
 export default function RegisterPage() {
   const [email, setEmail] = useState("");
@@ -36,6 +37,7 @@ export default function RegisterPage() {
 
   return (
     <div className="auth-page">
+      <AuthBrand />
       <form className="auth-card" onSubmit={handleSubmit}>
         <h1>הרשמה</h1>
 

@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { apiFetch, setToken, API_URL } from "../api";
+import googleLogo from "../assets/google-g.svg";
+import AuthBrand from "../components/AuthBrand";
 
 
 export default function LoginPage() {
@@ -39,6 +41,7 @@ export default function LoginPage() {
 
     return (
       <div className="auth-page">
+        <AuthBrand />
         <form className="auth-card" onSubmit={handleSubmit}>
           <h1>התחברות</h1>
 
@@ -75,6 +78,7 @@ export default function LoginPage() {
               window.location.href = `${API_URL}/auth/google/login`;
             }}
           >
+            <img src={googleLogo} alt="" className="google-logo" />
             התחברות עם Google
           </button>
 

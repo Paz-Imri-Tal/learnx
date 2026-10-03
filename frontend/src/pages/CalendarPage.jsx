@@ -5,7 +5,7 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import heLocale from "@fullcalendar/core/locales/he";
-import { Trash2 } from "lucide-react";
+import { RefreshCw, Trash2 } from "lucide-react";
 import { apiFetch } from "../api";
 
 const TASK_COLOR = "#f47a60";
@@ -66,6 +66,8 @@ export default function CalendarPage() {
   const [form, setForm] = useState(EMPTY_FORM);
   const [editingEvent, setEditingEvent] = useState(null);
   const [saving, setSaving] = useState(false);
+  const [syncing, setSyncing] = useState(false);
+  const [message, setMessage] = useState("");
 
   useEffect(() => {
     async function loadData() {
@@ -117,7 +119,9 @@ export default function CalendarPage() {
     }
 
     if (data.source !== "local") {
-      setError("אירוע מ-Google Calendar אפשר לשנות רק ב-Google Calendar");
+      if (data.link) {
+        window.open(data.link, "_blank", "noopener");
+      }
       return;
     }
 
@@ -208,6 +212,25 @@ export default function CalendarPage() {
     }
   }
 
+  async function handleSync() {
+    setSyncing(true);
+    setError("");
+    setMessage("");
+
+    try {
+      const result = await apiFetch("/events/sync-google", { method: "POST" });
+      const updated = await apiFetch("/events");
+      setEvents(updated);
+      setMessage(
+        `הסנכרון הושלם: ${result.imported} חדשים, ${result.updated} עודכנו, ${result.removed} הוסרו`
+      );
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setSyncing(false);
+    }
+  }
+
   if (loading) {
     return <p>טוען לוח שנה...</p>;
   }
@@ -221,10 +244,22 @@ export default function CalendarPage() {
     <section className="panel panel-wide">
       <div className="panel-header">
         <h1>לוח שנה</h1>
-        <p className="task-meta">
-          לחיצה על יום יוצרת אירוע חדש. מטלות מסומנות ב-📌.
-        </p>
+        <button
+          className="button-with-icon button-secondary"
+          onClick={handleSync}
+          disabled={syncing}
+        >
+          <RefreshCw size={18} />
+          {syncing ? "מסנכרן..." : "סנכרון עם Google Calendar"}
+        </button>
       </div>
+
+      <p className="task-meta">
+        לחיצה על יום יוצרת אירוע חדש. מטלות מסומנות ב-📌. אירועים מ-Google
+        מוצגים באפור.
+      </p>
+
+      {message && <p className="form-success">{message}</p>}
 
       {error && <p className="form-error">{error}</p>}
 

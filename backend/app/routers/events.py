@@ -1,13 +1,18 @@
+import logging
+
 from fastapi import APIRouter, Depends, HTTPException, status
+from google.auth.exceptions import RefreshError
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
+from app.core.calendar_sync import sync_google_calendar
 from app.core.deps import get_current_student
 from app.database import get_db
-from app.models import Event, Student
+from app.models import Event, GoogleCredential, Student
 from app.schemas.event import EventIn, EventOut
 
 router = APIRouter(prefix="/events", tags=["events"])
+logger = logging.getLogger("uvicorn.error")
 
 
 def get_own_local_event(event_id: int, student: Student, db: Session) -> Event:
@@ -50,6 +55,37 @@ def create_event(
     db.commit()
     db.refresh(event)
     return event
+
+
+@router.post("/sync-google")
+def sync_google(
+    current_student: Student = Depends(get_current_student),
+    db: Session = Depends(get_db),
+):
+    credential = db.scalar(
+        select(GoogleCredential).where(
+            GoogleCredential.student_id == current_student.id
+        )
+    )
+    if credential is None:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="כדי לסנכרן, צריך קודם להתחבר עם Google",
+        )
+
+    try:
+        return sync_google_calendar(current_student, credential, db)
+    except (PermissionError, RefreshError):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="ההרשאה ל-Google Calendar חסרה או פגה. התחבר מחדש עם Google",
+        )
+    except Exception:
+        logger.exception("Google Calendar sync failed")
+        raise HTTPException(
+            status_code=status.HTTP_502_BAD_GATEWAY,
+            detail="לא הצלחנו להתחבר ל-Google Calendar. נסה שוב בעוד רגע",
+        )
 
 
 @router.put("/{event_id}", response_model=EventOut)
