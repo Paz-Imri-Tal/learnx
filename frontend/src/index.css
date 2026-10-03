@@ -596,3 +596,19 @@ a {
 .calendar-wrapper .fc-event {
   cursor: pointer;
 }
+
+.auth-divider {
+  margin: 4px 0;
+  text-align: center;
+  color: var(--color-text-muted);
+}
+
+.google-button {
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  background-color: #ffffff;
+}
+
+.google-button:hover {
+  background-color: #f5f9fa;
+}

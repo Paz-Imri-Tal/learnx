@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app import models
 from app.database import Base, engine
-from app.routers import auth, courses, tasks, events
+from app.routers import auth, courses, tasks, events, google_auth
 
 Base.metadata.create_all(bind=engine)
 
@@ -21,6 +21,7 @@ app.include_router(auth.router)
 app.include_router(courses.router)
 app.include_router(tasks.router)
 app.include_router(events.router)
+app.include_router(google_auth.router)
 
 @app.get("/health")
 def health():

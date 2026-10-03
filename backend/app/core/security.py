@@ -1,11 +1,16 @@
+import base64
+import hashlib
 from datetime import datetime, timedelta, timezone
 
 import jwt
+from cryptography.fernet import Fernet
 from pwdlib import PasswordHash
 
 from app.core.config import ACCESS_TOKEN_EXPIRE_MINUTES, ALGORITHM, SECRET_KEY
 
 password_hash = PasswordHash.recommended()
+
+fernet = Fernet(base64.urlsafe_b64encode(hashlib.sha256(SECRET_KEY.encode()).digest()))
 
 
 def hash_password(password: str) -> str:
@@ -28,3 +33,11 @@ def decode_access_token(token: str) -> int | None:
         return int(payload["sub"])
     except (jwt.InvalidTokenError, KeyError, ValueError):
         return None
+
+
+def encrypt_secret(value: str) -> str:
+    return fernet.encrypt(value.encode()).decode()
+
+
+def decrypt_secret(value: str) -> str:
+    return fernet.decrypt(value.encode()).decode()

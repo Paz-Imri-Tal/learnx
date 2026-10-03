@@ -8,13 +8,18 @@ import HomePage from "./pages/HomePage";
 import TasksPage from "./pages/TasksPage";
 import TaskDetailPage from "./pages/TaskDetailPage";
 import CalendarPage from "./pages/CalendarPage";
+import GoogleCallbackPage from "./pages/GoogleCallbackPage";
 
 export default function App() {
   return (
     <Routes>
       <Route path="/login" element={<LoginPage />} />
-      <Route path="/register" element={<RegisterPage />} />
 
+      <Route path="/auth/google" element={<GoogleCallbackPage />} />
+
+      <Route path="/register" element={<RegisterPage />} />
+      
+      
       <Route element={<Layout />}>
         <Route path="/" element={<HomePage />} />
 
@@ -27,6 +32,7 @@ export default function App() {
         <Route path="/tasks/:taskId" element={<TaskDetailPage />} />
 
         <Route path="/calendar" element={<CalendarPage />} />
+
 
         <Route path="*" element={<p>העמוד בבנייה</p>} />
       </Route>

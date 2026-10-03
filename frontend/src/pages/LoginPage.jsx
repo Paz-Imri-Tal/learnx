@@ -1,12 +1,17 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { apiFetch, setToken } from "../api";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { apiFetch, setToken, API_URL } from "../api";
 
 
 export default function LoginPage() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [error, setError] = useState("");
+    const [searchParams] = useSearchParams();
+    const [error, setError] = useState(
+    searchParams.get("error") === "google"
+        ? "ההתחברות עם Google נכשלה, נסה שוב"
+        : ""
+    );
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
@@ -59,6 +64,18 @@ export default function LoginPage() {
 
           <button type="submit" disabled={loading}>
             {loading ? "מתחבר..." : "התחבר"}
+          </button>
+
+          <p className="auth-divider">או</p>
+
+          <button
+            type="button"
+            className="google-button"
+            onClick={() => {
+              window.location.href = `${API_URL}/auth/google/login`;
+            }}
+          >
+            התחברות עם Google
           </button>
 
           <p>
