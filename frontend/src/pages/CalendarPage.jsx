@@ -358,6 +358,11 @@ export default function CalendarPage() {
           height="auto"
           selectable
           dayMaxEvents={3}
+          eventTimeFormat={{
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: false,
+          }}
           events={calendarEvents}
           select={handleSelect}
           eventClick={handleEventClick}
