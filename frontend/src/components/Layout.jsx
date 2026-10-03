@@ -50,43 +50,45 @@ export default function Layout() {
       return <p className="loading">טוען...</p>;
     }
 
-    return(
-        <div className="layout">
-          <header className="topbar">
-            <div className="topbar-brand">
-                <img src={logo} alt="LearnX Logo" className="topbar-logo" />
-                <div>
-                    <h2 className="topbar-title">לרניקס</h2>
-                    <p className="topbar-subtitle">מערכת לניהול התואר</p>
-                </div>
+    return (
+      <div className="layout">
+        <header className="topbar">
+          <div className="topbar-brand">
+            <img src={logo} alt="LearnX Logo" className="topbar-logo" />
+            <div>
+              <h2 className="topbar-title">לרניקס</h2>
+              <p className="topbar-subtitle">מערכת לניהול התואר</p>
             </div>
-
-            <div className="topbar-user">
-                <span className="topbar-greeting">היי {student.full_name}!</span>
-                <button className="logout-button" onClick={handleLogout}>
-                    <LogOut size={20} />
-                    התנתקות
-                </button>
-            </div>
-          </header>
-
-          <div className="layout-body">
-            <nav className="sidenav">
-                {NAV_ITEMS.map((item) => {
-                    const Icon = item.icon;
-                    return (
-                        <NavLink key={item.to} to={item.to} className="sidenav-link">
-                            <span>{item.label}</span>
-                            <Icon size={26} />
-                        </NavLink>
-                    );
-                })}
-            </nav>
-
-            <main className="main-content">
-              <Outlet context={{ student }} />
-            </main>
           </div>
+
+          <div className="topbar-user">
+            <span className="topbar-greeting">
+              היי <bdi>{student.full_name}</bdi>!
+            </span>
+            <button className="logout-button" onClick={handleLogout}>
+              <LogOut size={20} />
+              התנתקות
+            </button>
+          </div>
+        </header>
+
+        <div className="layout-body">
+          <nav className="sidenav">
+            {NAV_ITEMS.map((item) => {
+              const Icon = item.icon;
+              return (
+                <NavLink key={item.to} to={item.to} className="sidenav-link">
+                  <span>{item.label}</span>
+                  <Icon size={26} />
+                </NavLink>
+              );
+            })}
+          </nav>
+
+          <main className="main-content">
+            <Outlet context={{ student }} />
+          </main>
         </div>
+      </div>
     );
 }

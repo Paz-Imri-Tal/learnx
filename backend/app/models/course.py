@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from sqlalchemy import ForeignKey, String, func
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database import Base
 
@@ -19,3 +19,4 @@ class Course(Base):
     semester: Mapped[str] = mapped_column(String(10))
     grade: Mapped[float | None]
     created_at: Mapped[datetime] = mapped_column(server_default=func.now())
+    student: Mapped["Student"] = relationship()

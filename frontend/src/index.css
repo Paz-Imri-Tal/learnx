@@ -416,3 +416,134 @@ a {
   outline: 2px solid var(--color-primary);
   outline-offset: 1px;
 }
+
+.invitations {
+  margin: 16px 0 24px;
+  padding: 16px 20px;
+  border: 1px solid var(--color-secondary);
+  border-radius: var(--radius);
+  background-color: #fff4f1;
+}
+
+.invitations h2 {
+  margin: 0 0 12px;
+  font-size: 1.1rem;
+}
+
+.invitation-item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 0;
+}
+
+.task-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 16px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  font-weight: 400;
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.task-item:hover {
+  border-color: var(--color-primary);
+  background-color: #f5f9fa;
+}
+
+.task-main {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.task-meta {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+}
+
+.due-badge {
+  flex-shrink: 0;
+  padding: 4px 10px;
+  border-radius: 50px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--color-text);
+  background-color: var(--color-border);
+}
+
+.due-soon {
+  color: #8a2f17;
+  background-color: #fde3db;
+}
+
+.due-late {
+  color: var(--color-danger);
+  background-color: #fbe9e7;
+}
+
+.status-badge {
+  padding: 2px 10px;
+  border-radius: 50px;
+  font-size: 0.85rem;
+  color: var(--color-primary);
+  background-color: #e6f0f2;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.invite-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 24px;
+}
+
+.invite-row {
+  display: flex;
+  gap: 12px;
+}
+
+.invite-row input {
+  flex: 1;
+  padding: 10px 12px;
+  font: inherit;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+}
+
+.danger-zone {
+  margin-top: 32px;
+  padding-top: 16px;
+  border-top: 1px solid var(--color-border);
+}
+
+.button-danger {
+  background-color: var(--color-danger);
+}
+
+.button-danger:hover {
+  background-color: #8c1d17;
+}
+
+.button-danger-outline {
+  border: 1px solid var(--color-danger);
+  color: var(--color-danger);
+  background-color: transparent;
+}
+
+.button-danger-outline:hover {
+  color: #ffffff;
+  background-color: var(--color-danger);
+}

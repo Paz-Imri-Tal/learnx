@@ -116,7 +116,11 @@ export default function CoursesPage() {
   }
 
   async function handleDelete(course) {
-    if (!window.confirm(`למחוק את הקורס "${course.name}"?`)) {
+    if (
+      !window.confirm(
+        `למחוק את הקורס "${course.name}"? כל המטלות שלו יימחקו גם הן.`
+      )
+    ) {
       return;
     }
 
