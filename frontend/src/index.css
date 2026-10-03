@@ -547,3 +547,52 @@ a {
   color: #ffffff;
   background-color: var(--color-danger);
 }
+.panel-wide {
+  max-width: 1200px;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.checkbox-label input {
+  width: auto;
+  padding: 0;
+}
+
+.form-field-small {
+  flex: 0 0 auto;
+  min-width: 80px;
+}
+
+.course-form input[type="color"] {
+  width: 64px;
+  height: 42px;
+  padding: 4px;
+}
+
+.calendar-wrapper {
+  margin-top: 16px;
+}
+
+.calendar-wrapper .fc {
+  --fc-button-bg-color: var(--color-primary);
+  --fc-button-border-color: var(--color-primary);
+  --fc-button-hover-bg-color: var(--color-primary-dark);
+  --fc-button-hover-border-color: var(--color-primary-dark);
+  --fc-button-active-bg-color: var(--color-primary-dark);
+  --fc-button-active-border-color: var(--color-primary-dark);
+  --fc-today-bg-color: rgba(127, 231, 220, 0.2);
+  font-family: var(--font-main);
+}
+
+.calendar-wrapper .fc .fc-toolbar-title {
+  font-size: 1.3rem;
+  color: var(--color-primary);
+}
+
+.calendar-wrapper .fc-event {
+  cursor: pointer;
+}

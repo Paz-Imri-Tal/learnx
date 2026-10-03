@@ -7,6 +7,7 @@ import CoursesPage from "./pages/CoursesPage";
 import HomePage from "./pages/HomePage";
 import TasksPage from "./pages/TasksPage";
 import TaskDetailPage from "./pages/TaskDetailPage";
+import CalendarPage from "./pages/CalendarPage";
 
 export default function App() {
   return (
@@ -24,6 +25,8 @@ export default function App() {
         <Route path="/tasks" element={<TasksPage />} />
 
         <Route path="/tasks/:taskId" element={<TaskDetailPage />} />
+
+        <Route path="/calendar" element={<CalendarPage />} />
 
         <Route path="*" element={<p>העמוד בבנייה</p>} />
       </Route>
