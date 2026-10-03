@@ -2,6 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
+import GradesPage from "./pages/GradesPage";
 import CoursesPage from "./pages/CoursesPage";
 import HomePage from "./pages/HomePage";
 
@@ -13,7 +14,10 @@ export default function App() {
 
       <Route element={<Layout />}>
         <Route path="/" element={<HomePage />} />
+
         <Route path="/courses" element={<CoursesPage />} />
+
+        <Route path="/grades" element={<GradesPage />} />
 
         <Route path="*" element={<p>העמוד בבנייה</p>} />
       </Route>
