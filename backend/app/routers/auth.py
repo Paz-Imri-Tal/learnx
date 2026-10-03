@@ -19,7 +19,7 @@ def register(data: RegisterRequest, db: Session = Depends(get_db)):
     if existing:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
-            detail="Email already registered",
+            detail="כתובת האימייל כבר רשומה במערכת",
         )
 
     student = Student(
@@ -46,7 +46,7 @@ def login(data: LoginRequest, db: Session = Depends(get_db)):
     ):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Incorrect email or password",
+            detail="אימייל או סיסמה שגויים",
         )
     
     return TokenResponse(access_token=create_access_token(student.id))

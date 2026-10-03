@@ -17,14 +17,14 @@ def get_current_student(
     if student_id is None:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid or expired token"
+            detail="החיבור פג תוקף, יש להתחבר מחדש",
         )
     
     student = db.get(Student, student_id)
     if student is None:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid or expired token",
+            detail="החיבור פג תוקף, יש להתחבר מחדש",
         )
     
     return student
