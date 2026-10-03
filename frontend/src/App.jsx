@@ -1,25 +1,13 @@
-import { useEffect, useState } from "react";
-import logo from "./assets/logo.png";
+import { Routes, Route } from "react-router-dom";
+import LoginPage from "./pages/LoginPage";
+import HomePage from "./pages/HomePage";
 
-function App() {
-  const [status, setStatus] = useState("בודק...");
 
-  useEffect(() => {
-    fetch("http://localhost:8000/health")
-      .then((response) => response.json())
-      .then((data) => setStatus(data.status))
-      .catch(() => setStatus("השרת לא זמין"))
-  }, []);
-
+export default function App() {
   return (
-    <div>
-      <div style={{ backgroundColor: "var(--color-primary)", padding: "16px"}}>
-        <img src={logo} alt="LearnX Logo" width="200"/>
-      </div>
-      <h1>LearnX</h1>
-      <p>מצב השרת: {status}</p>
-    </div>
+    <Routes>
+      <Route path="/" element={<HomePage />}/>
+      <Route path="/login" element={<LoginPage />}/>
+    </Routes>
   );
 }
-
-export default App
