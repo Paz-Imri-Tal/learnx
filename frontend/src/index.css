@@ -941,3 +941,18 @@ a {
   border: 1px solid var(--color-border);
   border-radius: var(--radius);
 }
+
+
+/* ===== רישומון מיילים ===== */
+.course-form textarea {
+  padding: 10px 12px;
+  font: inherit;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background-color: var(--color-bg);
+  resize: vertical;
+}
+
+.contact-email {
+  margin: 0;
+}

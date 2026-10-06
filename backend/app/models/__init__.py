@@ -5,3 +5,4 @@ from app.models.event import Event
 from app.models.google_credential import GoogleCredential
 from app.models.task_file import TaskFile
 from app.models.folder import Folder, FolderFile
+from app.models.contact import Contact

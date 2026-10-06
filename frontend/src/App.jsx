@@ -12,6 +12,7 @@ import GoogleCallbackPage from "./pages/GoogleCallbackPage";
 import FoldersPage from "./pages/FoldersPage";
 import FolderPage from "./pages/FolderPage.jsx";
 import GoogleLinkedPage from "./pages/GoogleLinkedPage";
+import ContactsPage from "./pages/ContactsPage";
 
 export default function App() {
   return (
@@ -24,23 +25,15 @@ export default function App() {
 
       <Route element={<Layout />}>
         <Route path="/" element={<HomePage />} />
-
         <Route path="/courses" element={<CoursesPage />} />
-
         <Route path="/grades" element={<GradesPage />} />
-
         <Route path="/tasks" element={<TasksPage />} />
-
         <Route path="/tasks/:taskId" element={<TaskDetailPage />} />
-
         <Route path="/calendar" element={<CalendarPage />} />
-
         <Route path="/folders" element={<FoldersPage />} />
-
         <Route path="/folders/:folderId" element={<FolderPage />} />
-
         <Route path="/google/linked" element={<GoogleLinkedPage />} />
-
+        <Route path="/contacts" element={<ContactsPage />} />
         <Route path="*" element={<p>העמוד בבנייה</p>} />
       </Route>
     </Routes>

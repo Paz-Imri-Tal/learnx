@@ -17,3 +17,8 @@ GOOGLE_REDIRECT_URI = os.getenv(
     "GOOGLE_REDIRECT_URI", "http://localhost:8000/auth/google/callback"
 )
 FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:5173")
+
+SMTP_HOST = os.getenv("SMTP_HOST", "smtp.gmail.com")
+SMTP_PORT = int(os.getenv("SMTP_PORT", "465"))
+SMTP_USERNAME = os.getenv("SMTP_USERNAME")
+SMTP_APP_PASSWORD = os.getenv("SMTP_APP_PASSWORD")
