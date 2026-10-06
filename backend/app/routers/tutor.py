@@ -87,3 +87,26 @@ def upload_material(
     return material
 
 
+@router.delete("/courses/{course_id}/materials/{material_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_material(
+    course_id: int,
+    material_id: int,
+    current_student: Student = Depends(get_current_student),
+    db: Session = Depends(get_db)
+):
+    get_own_course(course_id, current_student, db)
+
+    material = db.scalar(
+        select(Material)
+        .where(Material.course_id == course_id, Material.id == material_id)
+    )
+
+    if material is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="חומר הלימוד לא נמצא"
+        )
+
+    
+    db.delete(material)
+    db.commit()
