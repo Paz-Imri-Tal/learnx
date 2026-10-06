@@ -1,18 +1,23 @@
 import { useRef, useState } from "react";
 import { UploadCloud, X } from "lucide-react";
 
-const MAX_FILE_SIZE = 40 * 1024 * 1024;
-
-export default function FileDrop({ files, onChange, multiple = false }) {
+export default function FileDrop({
+  files,
+  onChange,
+  multiple = false,
+  maxSizeMb = 40,
+  accept,
+}) {
+  const maxFileSize = maxSizeMb * 1024 * 1024;
   const inputRef = useRef(null);
   const [dragging, setDragging] = useState(false);
   const [rejected, setRejected] = useState([]);
 
   function addFiles(newFiles) {
-    const valid = newFiles.filter((file) => file.size <= MAX_FILE_SIZE);
+    const valid = newFiles.filter((file) => file.size <= maxFileSize);
     setRejected(
       newFiles
-        .filter((file) => file.size > MAX_FILE_SIZE)
+        .filter((file) => file.size > maxFileSize)
         .map((file) => file.name)
     );
     onChange(multiple ? [...files, ...valid] : valid.slice(0, 1));
@@ -47,11 +52,12 @@ export default function FileDrop({ files, onChange, multiple = false }) {
       >
         <UploadCloud size={32} />
         <p>גרור לכאן {multiple ? "קבצים" : "קובץ"} או לחץ לבחירה</p>
-        <p className="task-meta">עד 40MB לקובץ</p>
+        <p className="task-meta">עד {maxSizeMb}MB לקובץ</p>
         <input
           ref={inputRef}
           type="file"
           multiple={multiple}
+          accept={accept}
           onChange={handleSelect}
           hidden
         />
@@ -62,8 +68,8 @@ export default function FileDrop({ files, onChange, multiple = false }) {
           {rejected.length === 1 ? "הקובץ" : "הקבצים"}{" "}
           <bdi>{rejected.join(", ")}</bdi>{" "}
           {rejected.length === 1
-            ? "גדול מ-40MB ולא נוסף"
-            : "גדולים מ-40MB ולא נוספו"}
+            ? `גדול מ-${maxSizeMb}MB ולא נוסף`
+            : `גדולים מ-${maxSizeMb}MB ולא נוספו`}
         </p>
       )}
 

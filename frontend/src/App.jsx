@@ -13,6 +13,8 @@ import FoldersPage from "./pages/FoldersPage";
 import FolderPage from "./pages/FolderPage.jsx";
 import GoogleLinkedPage from "./pages/GoogleLinkedPage";
 import ContactsPage from "./pages/ContactsPage";
+import TutorPage from "./pages/TutorPage";
+import TutorCoursePage from "./pages/TutorCoursePage";
 
 export default function App() {
   return (
@@ -34,6 +36,8 @@ export default function App() {
         <Route path="/folders/:folderId" element={<FolderPage />} />
         <Route path="/google/linked" element={<GoogleLinkedPage />} />
         <Route path="/contacts" element={<ContactsPage />} />
+        <Route path="/tutor" element={<TutorPage />} />
+        <Route path="/tutor/:courseId" element={<TutorCoursePage />} />
         <Route path="*" element={<p>העמוד בבנייה</p>} />
       </Route>
     </Routes>

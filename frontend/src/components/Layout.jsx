@@ -7,6 +7,7 @@ import {
   FolderOpen,
   Mail,
   CalendarDays,
+  GraduationCap,
   LogOut,
 } from "lucide-react";
 import { apiFetch, clearToken } from "../api";
@@ -19,6 +20,7 @@ const NAV_ITEMS = [
   { to: "/folders", label: "תיקיות", icon: FolderOpen },
   { to: "/contacts", label: "רישומון מיילים", icon: Mail },
   { to: "/calendar", label: "לוח שנה", icon: CalendarDays },
+  { to: "/tutor", label: "מורה פרטי", icon: GraduationCap },
 ];
 
 export default function Layout() {

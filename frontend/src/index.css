@@ -956,3 +956,109 @@ a {
 .contact-email {
   margin: 0;
 }
+
+
+
+/* ===== מורה פרטי ===== */
+/* הצבעים של בועות הצ'אט לקוחים מבועת העוזר באתר המקורי (assistant-widget.css) */
+.tutor-intro {
+  margin: 0 0 16px;
+  color: var(--color-text-muted);
+}
+
+.tutor-materials {
+  margin: 16px 0;
+  padding: 12px 16px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background-color: #f2f8f9;
+}
+
+.tutor-materials summary {
+  font-weight: 700;
+  color: var(--color-primary);
+  cursor: pointer;
+}
+
+.tutor-materials .course-list {
+  margin: 12px 0;
+}
+
+.tutor-material {
+  justify-content: flex-start;
+  background-color: var(--color-bg);
+}
+
+.tutor-material-name {
+  flex: 1;
+  word-break: break-word;
+}
+
+.tutor-chat {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  height: 55vh;
+  min-height: 300px;
+  padding: 16px;
+  overflow-y: auto;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius) var(--radius) 0 0;
+  background-color: #f3f6f5;
+}
+
+.tutor-chat-empty {
+  margin: auto;
+  text-align: center;
+  color: var(--color-text-muted);
+}
+
+.tutor-message {
+  max-width: 80%;
+  padding: 10px 14px;
+  border-radius: 12px;
+  line-height: 1.6;
+  white-space: pre-wrap; /* שמירת ירידות שורה בתשובה של המורה */
+  word-wrap: break-word;
+}
+
+.tutor-message-user {
+  align-self: flex-start;
+  color: #ffffff;
+  background-color: var(--color-primary);
+}
+
+.tutor-message-assistant {
+  align-self: flex-end;
+  color: var(--color-text);
+  background-color: #ffffff;
+  border: 1px solid #d5e0de;
+}
+
+.tutor-message-pending {
+  opacity: 0.6;
+}
+
+.tutor-form {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+  padding: 10px;
+  border: 1px solid var(--color-border);
+  border-top: none;
+  border-radius: 0 0 var(--radius) var(--radius);
+  background-color: var(--color-bg);
+}
+
+.tutor-form textarea {
+  flex: 1;
+  padding: 10px 12px;
+  font: inherit;
+  border: 1px solid #b7c9c6;
+  border-radius: var(--radius);
+  resize: none;
+}
+
+.tutor-form textarea:focus {
+  outline: 2px solid var(--color-primary);
+}
