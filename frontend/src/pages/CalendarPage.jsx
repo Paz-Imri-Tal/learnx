@@ -7,6 +7,7 @@ import interactionPlugin from "@fullcalendar/interaction";
 import heLocale from "@fullcalendar/core/locales/he";
 import { RefreshCw, Trash2 } from "lucide-react";
 import { apiFetch } from "../api";
+import GoogleConnect from "../components/GoogleConnect";
 
 const TASK_COLOR = "#f47a60";
 
@@ -260,6 +261,11 @@ export default function CalendarPage() {
       </p>
 
       {message && <p className="form-success">{message}</p>}
+
+      <GoogleConnect
+        scope="calendar"
+        reason="כדי לסנכרן את האירועים שלך מ-Google Calendar."
+      />
 
       {error && <p className="form-error">{error}</p>}
 

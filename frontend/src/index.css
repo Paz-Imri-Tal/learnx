@@ -781,3 +781,163 @@ a {
     margin: 0;
   }
 }
+
+/* ===== קבצים: העלאה ורשימה ===== */
+.upload-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.upload-form .button-with-icon {
+  align-self: flex-start;
+}
+
+.file-drop {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 24px;
+  border: 2px dashed var(--color-border);
+  border-radius: var(--radius);
+  color: var(--color-text-muted);
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.15s, background-color 0.15s;
+}
+
+.file-drop p {
+  margin: 0;
+}
+
+.file-drop:hover,
+.file-drop-active {
+  border-color: var(--color-primary);
+  background-color: #f2f8f9;
+  color: var(--color-primary);
+}
+
+.file-drop-list {
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  color: var(--color-text);
+  font-weight: 500;
+}
+
+.file-drop-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 6px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+}
+
+.file-item {
+  align-items: center;
+}
+
+.file-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--color-primary);
+}
+
+.file-info p {
+  margin: 0;
+}
+
+.file-name {
+  color: var(--color-text);
+  font-weight: 500;
+}
+
+/* ===== תיקיות ===== */
+.folder-form {
+  margin-bottom: 24px;
+}
+
+.folder-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 16px;
+}
+
+.folder-card {
+  position: relative;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background-color: var(--color-bg);
+  transition: box-shadow 0.15s, border-color 0.15s;
+}
+
+.folder-card:hover {
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow);
+}
+
+.folder-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 20px 12px 16px;
+  color: var(--color-primary);
+  text-decoration: none;
+  text-align: center;
+}
+
+.folder-name {
+  color: var(--color-text);
+  font-weight: 500;
+  word-break: break-word;
+}
+
+.folder-card .icon-button {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+}
+
+
+/* ===== חיבור חשבון Google ===== */
+.google-connect {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin: 16px 0;
+  padding: 16px 20px;
+  border: 1px solid var(--color-border);
+  border-inline-start: 4px solid var(--color-primary);
+  border-radius: var(--radius);
+  background-color: #f2f8f9;
+}
+
+.google-connect p {
+  margin: 0;
+}
+
+.google-connect-title {
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.upload-form .form-field input {
+  padding: 10px 12px;
+  font: inherit;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+}

@@ -32,8 +32,18 @@ class TaskOut(BaseModel):
     updated_by_name: str | None
 
 
+class TaskFileOut(BaseModel):
+    id: int
+    file_name: str
+    mime_type: str
+    size: int
+    uploaded_by_name: str | None
+    created_at: datetime
+
+
 class TaskDetailOut(TaskOut):
     partners: list[PartnerOut]
+    files: list[TaskFileOut]
 
 
 class InvitationOut(BaseModel):

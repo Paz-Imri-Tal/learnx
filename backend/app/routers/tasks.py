@@ -1,21 +1,41 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+import logging
+
+from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, status
+from google.auth.exceptions import RefreshError
+from googleapiclient.errors import HttpError
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from app.core.deps import get_current_student
+from app.core.drive import (
+    DriveNotConnected,
+    delete_from_drive,
+    download_from_drive,
+    drive_errors,
+    file_response,
+    get_drive_service,
+    read_upload,
+    upload_to_drive,
+)
 from app.database import get_db
-from app.models import Course, Student, Task, TaskPartner
+from app.models import Course, Student, Task, TaskFile, TaskPartner
 from app.routers.courses import get_own_course
 from app.schemas.task import (
     InvitationOut,
     InviteIn,
     PartnerOut,
     TaskDetailOut,
+    TaskFileOut,
     TaskIn,
     TaskOut,
 )
 
 router = APIRouter(prefix="/tasks", tags=["tasks"])
+logger = logging.getLogger("uvicorn.error")
+
+OWNER_DRIVE_MISSING = (
+    "כדי לשמור קבצים במטלה, בעל המטלה צריך להתחבר לפחות פעם אחת עם Google"
+)
 
 
 def is_owner(task: Task, student: Student) -> bool:
@@ -69,6 +89,38 @@ def to_task_out(task: Task, student: Student) -> TaskOut:
         updated_at=task.updated_at,
         updated_by_name=task.updated_by.full_name if task.updated_by else None,
     )
+
+
+def to_file_out(task_file: TaskFile) -> TaskFileOut:
+    return TaskFileOut(
+        id=task_file.id,
+        file_name=task_file.file_name,
+        mime_type=task_file.mime_type,
+        size=task_file.size,
+        uploaded_by_name=task_file.uploaded_by.full_name if task_file.uploaded_by else None,
+        created_at=task_file.created_at,
+    )
+
+
+def find_task_file(task: Task, file_id: int) -> TaskFile:
+    for task_file in task.files:
+        if task_file.id == file_id:
+            return task_file
+    raise HTTPException(
+        status_code=status.HTTP_404_NOT_FOUND,
+        detail="הקובץ לא נמצא",
+    )
+
+
+def delete_task_drive_files(task: Task, db: Session) -> None:
+    if not task.files:
+        return
+    try:
+        service = get_drive_service(task.course.student_id, db)
+        for task_file in task.files:
+            delete_from_drive(service, task_file.drive_file_id)
+    except (DriveNotConnected, RefreshError, HttpError):
+        logger.warning("Could not delete Drive files of task %s", task.id)
 
 
 def to_partner_out(partner: TaskPartner) -> PartnerOut:
@@ -150,7 +202,12 @@ def get_task(
         for partner in task.partners
         if owner or partner.status == "accepted"
     ]
-    return TaskDetailOut(**to_task_out(task, current_student).model_dump(), partners=partners)
+    files = [to_file_out(task_file) for task_file in task.files]
+    return TaskDetailOut(
+        **to_task_out(task, current_student).model_dump(),
+        partners=partners,
+        files=files,
+    )
 
 
 @router.put("/{task_id}", response_model=TaskOut)
@@ -177,7 +234,78 @@ def delete_task(
     db: Session = Depends(get_db),
 ):
     task = get_task_for_owner(task_id, current_student, db)
+    delete_task_drive_files(task, db)
     db.delete(task)
+    db.commit()
+
+
+@router.post(
+    "/{task_id}/files",
+    response_model=list[TaskFileOut],
+    status_code=status.HTTP_201_CREATED,
+)
+def upload_task_files(
+    task_id: int,
+    files: list[UploadFile] = File(...),
+    current_student: Student = Depends(get_current_student),
+    db: Session = Depends(get_db),
+):
+    task = get_task_for_member(task_id, current_student, db)
+    uploads = [read_upload(upload) for upload in files]
+
+    created = []
+    with drive_errors(OWNER_DRIVE_MISSING):
+        service = get_drive_service(task.course.student_id, db)
+        for file_name, content, mime_type in uploads:
+            drive_file_id = upload_to_drive(service, file_name, content, mime_type)
+            task_file = TaskFile(
+                task_id=task.id,
+                file_name=file_name,
+                drive_file_id=drive_file_id,
+                mime_type=mime_type,
+                size=len(content),
+                uploaded_by_id=current_student.id,
+            )
+            db.add(task_file)
+            created.append(task_file)
+
+    mark_updated(task, current_student)
+    db.commit()
+    for task_file in created:
+        db.refresh(task_file)
+    return [to_file_out(task_file) for task_file in created]
+
+
+@router.get("/{task_id}/files/{file_id}")
+def get_task_file_content(
+    task_id: int,
+    file_id: int,
+    download: bool = False,
+    current_student: Student = Depends(get_current_student),
+    db: Session = Depends(get_db),
+):
+    task = get_task_for_member(task_id, current_student, db)
+    task_file = find_task_file(task, file_id)
+    with drive_errors(OWNER_DRIVE_MISSING):
+        service = get_drive_service(task.course.student_id, db)
+        content = download_from_drive(service, task_file.drive_file_id)
+    return file_response(content, task_file.file_name, task_file.mime_type, download)
+
+
+@router.delete("/{task_id}/files/{file_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_task_file(
+    task_id: int,
+    file_id: int,
+    current_student: Student = Depends(get_current_student),
+    db: Session = Depends(get_db),
+):
+    task = get_task_for_owner(task_id, current_student, db)
+    task_file = find_task_file(task, file_id)
+    with drive_errors(OWNER_DRIVE_MISSING):
+        service = get_drive_service(current_student.id, db)
+        delete_from_drive(service, task_file.drive_file_id)
+    db.delete(task_file)
+    mark_updated(task, current_student)
     db.commit()
 
 

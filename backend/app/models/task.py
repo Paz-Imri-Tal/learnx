@@ -26,6 +26,12 @@ class Task(Base):
     partners: Mapped[list["TaskPartner"]] = relationship(
         back_populates="task", cascade="all, delete-orphan", passive_deletes=True
     )
+    files: Mapped[list["TaskFile"]] = relationship(
+        back_populates="task",
+        cascade="all, delete-orphan",
+        passive_deletes=True,
+        order_by="TaskFile.id",
+    )
 
 
 class TaskPartner(Base):

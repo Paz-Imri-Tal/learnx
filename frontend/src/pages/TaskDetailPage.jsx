@@ -1,8 +1,17 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { ArrowRight, Trash2, UserPlus, X } from "lucide-react";
-import { apiFetch } from "../api";
-import { daysUntil, dueClass, dueLabel, formatDate, formatDateTime } from "../utils/dates";
+import { ArrowRight, Trash2, Upload, UserPlus, X } from "lucide-react";
+import { apiFetch, apiUpload } from "../api";
+import FileDrop from "../components/FileDrop";
+import FileList from "../components/FileList";
+import {
+  daysUntil,
+  dueClass,
+  dueLabel,
+  formatDate,
+  formatDateTime,
+} from "../utils/dates";
+import GoogleConnect from "../components/GoogleConnect";
 
 const STATUS_LABELS = { pending: "ממתין לאישור", accepted: "שותף" };
 
@@ -14,6 +23,8 @@ export default function TaskDetailPage() {
   const [error, setError] = useState("");
   const [inviteEmail, setInviteEmail] = useState("");
   const [inviting, setInviting] = useState(false);
+  const [selectedFiles, setSelectedFiles] = useState([]);
+  const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
     async function loadTask() {
@@ -64,6 +75,50 @@ export default function TaskDetailPage() {
           (item) => item.student_id !== partner.student_id
         ),
       }));
+    } catch (err) {
+      setError(err.message);
+    }
+  }
+
+  async function handleUpload(event) {
+    event.preventDefault();
+    if (selectedFiles.length === 0) {
+      setError("נא לבחור קבצים להעלאה");
+      return;
+    }
+    setUploading(true);
+    setError("");
+
+    const formData = new FormData();
+    for (const file of selectedFiles) {
+      formData.append("files", file);
+    }
+
+    try {
+      await apiUpload(`/tasks/${taskId}/files`, formData);
+      const data = await apiFetch(`/tasks/${taskId}`);
+      setTask(data);
+      setSelectedFiles([]);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setUploading(false);
+    }
+  }
+
+  async function handleDeleteFile(file) {
+    if (
+      !window.confirm(
+        `למחוק את "${file.file_name}"? הקובץ יימחק גם מ-Google Drive.`
+      )
+    ) {
+      return;
+    }
+
+    try {
+      await apiFetch(`/tasks/${taskId}/files/${file.id}`, { method: "DELETE" });
+      const data = await apiFetch(`/tasks/${taskId}`);
+      setTask(data);
     } catch (err) {
       setError(err.message);
     }
@@ -166,6 +221,32 @@ export default function TaskDetailPage() {
           </li>
         ))}
       </ul>
+
+      <h2>קבצי המטלה</h2>
+      {task.is_owner && (
+        <GoogleConnect
+          scope="drive"
+          reason="קבצי המטלה נשמרים ב-Google Drive של בעל המטלה, כלומר שלך."
+        />
+      )}
+      <FileList
+        files={task.files}
+        basePath={`/tasks/${taskId}/files`}
+        canDelete={task.is_owner}
+        onDelete={handleDeleteFile}
+        onError={setError}
+      />
+      <form className="upload-form" onSubmit={handleUpload}>
+        <FileDrop files={selectedFiles} onChange={setSelectedFiles} multiple />
+        <button
+          type="submit"
+          className="button-with-icon"
+          disabled={uploading || selectedFiles.length === 0}
+        >
+          <Upload size={18} />
+          {uploading ? "מעלה..." : "העלאה"}
+        </button>
+      </form>
 
       {task.is_owner ? (
         <>
