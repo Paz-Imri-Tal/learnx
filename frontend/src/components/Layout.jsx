@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { apiFetch, clearToken } from "../api";
 import logo from "../assets/logo.png";
+import AssistantBubble from "./AssistantBubble";
 
 const NAV_ITEMS = [
   { to: "/courses", label: "קורסים", icon: BookOpen },
@@ -91,6 +92,7 @@ export default function Layout() {
             <Outlet context={{ student }} />
           </main>
         </div>
+        <AssistantBubble />
       </div>
     );
 }
